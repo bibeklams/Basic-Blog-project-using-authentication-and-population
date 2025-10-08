@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Blog Platform</title>
+  <style>
+    :root {
+      --primary-color: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary-color: #7209b7;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --success-color: #4bb543;
+      --error-color: #ff3333;
+      --warning-color: #ffa500;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      color: var(--dark-color);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 20px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .user-info {
+      flex: 1;
+    }
+    
+    .user-info h1 {
+      color: var(--dark-color);
+      margin-bottom: 5px;
+      font-size: 1.8rem;
+    }
+    
+    .user-info h2 {
+      color: #666;
+      font-size: 1.2rem;
+      font-weight: normal;
+    }
+    
+    .actions {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border-radius: var(--border-radius);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+    
+    .btn-danger {
+      background-color: var(--error-color);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background-color: #d63031;
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+    }
+    
+    .btn-outline:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .dashboard-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    
+    .blogs-section {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 25px;
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .section-title {
+      font-size: 1.5rem;
+      color: var(--dark-color);
+    }
+    
+    .no-data {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+    }
+    
+    .no-data i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: #ccc;
+    }
+    
+    .blogs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+    }
+    
+    .blog-card {
+      border: 1px solid #eaeaea;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      transition: var(--transition);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .blog-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .blog-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    
+    .blog-content {
+      padding: 20px;
+    }
+    
+    .blog-title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--dark-color);
+    }
+    
+    .blog-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      font-size: 0.85rem;
+      color: #666;
+    }
+    
+    .blog-meta i {
+      color: var(--primary-color);
+    }
+    
+    .blog-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .blog-actions .btn {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      .actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .blogs-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .actions {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .blog-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="user-info">
+        <h1>Dashboard</h1>
+        <h2>Hello, JohnDoe</h2>
+        <h2>Email: johndoe@example.com</h2>
+      </div>
+      <div class="actions">
+        <a href="/add-blog" class="btn btn-primary">
+          <i class="fas fa-plus"></i> Add New Blog
+        </a>
+        <a href="/logout" class="btn btn-secondary">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </div>
+    </header>
+    
+    <div class="dashboard-content">
+      <section class="blogs-section">
+        <div class="section-header">
+          <h2 class="section-title">Your Blog Posts</h2>
+          <div class="blog-count">3 Posts</div>
+        </div>
+        
+        <div class="blogs-grid">
+          <!-- Blog Post 1 -->
+          <div class="blog-card">
+            <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Blog Image" class="blog-image">
+            <div class="blog-content">
+              <h3 class="blog-title">Getting Started with Web Development</h3>
+              <div class="blog-meta">
+                <i class="fas fa-user"></i>
+                <span>JohnDoe (johndoe@example.com)</span>
+              </div>
+              <div class="blog-actions">
+                <a href="/update/1" class="btn btn-outline">
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <form action="/delete/1" method="post" style="display: inline;">
+                  <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Blog Post 2 -->
+          <div class="blog-card">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Blog Image" class="blog-image">
+            <div class="blog-content">
+              <h3 class="blog-title">The Future of Artificial Intelligence</h3>
+              <div class="blog-meta">
+                <i class="fas fa-user"></i>
+                <span>JohnDoe (johndoe@example.com)</span>
+              </div>
+              <div class="blog-actions">
+                <a href="/update/2" class="btn btn-outline">
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <form action="/delete/2" method="post" style="display: inline;">
+                  <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Blog Post 3 -->
+          <div class="blog-card">
+            <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80" alt="Blog Image" class="blog-image">
+            <div class="blog-content">
+              <h3 class="blog-title">Mastering CSS Grid and Flexbox</h3>
+              <div class="blog-meta">
+                <i class="fas fa-user"></i>
+                <span>JohnDoe (johndoe@example.com)</span>
+              </div>
+              <div class="blog-actions">
+                <a href="/update/3" class="btn btn-outline">
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <form action="/delete/3" method="post" style="display: inline;">
+                  <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- No Data State (commented out for demo) -->
+      <!--
+      <section class="blogs-section">
+        <div class="no-data">
+          <i class="fas fa-file-alt"></i>
+          <h2>No Blog Posts Yet</h2>
+          <p>You haven't created any blog posts. Get started by creating your first post!</p>
+          <a href="/add-blog" class="btn btn-primary" style="margin-top: 15px;">
+            <i class="fas fa-plus"></i> Create Your First Blog
+          </a>
+        </div>
+      </section>
+      -->
+    </div>
+    
+    <footer>
+      <p>&copy; 2023 Blog Platform. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add confirmation for delete actions
+      const deleteForms = document.querySelectorAll('form[action*="/delete/"]');
+      
+      deleteForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+          if (!confirm('Are you sure you want to delete this blog post? This action cannot be undone.')) {
+            e.preventDefault();
+          }
+        });
+      });
+      
+      // Add animation to blog cards on load
+      const blogCards = document.querySelectorAll('.blog-card');
+      
+      blogCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+          card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, index * 100);
+      });
+    });
+  </script>
+</body>
+</html>

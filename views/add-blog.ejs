@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create New Blog Post</title>
+  <style>
+    :root {
+      --primary-color: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary-color: #7209b7;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --success-color: #4bb543;
+      --error-color: #ff3333;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 700px;
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+    }
+    
+    .header {
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 25px;
+      text-align: center;
+    }
+    
+    .header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+    }
+    
+    .header p {
+      opacity: 0.9;
+      font-size: 0.9rem;
+    }
+    
+    .form-container {
+      padding: 30px;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--dark-color);
+    }
+    
+    .required::after {
+      content: " *";
+      color: var(--error-color);
+    }
+    
+    input, textarea, select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+    
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+    }
+    
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+    
+    .file-upload-container {
+      border: 2px dashed #ddd;
+      border-radius: var(--border-radius);
+      padding: 25px;
+      text-align: center;
+      transition: var(--transition);
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+    
+    .file-upload-container:hover {
+      border-color: var(--primary-color);
+      background-color: rgba(67, 97, 238, 0.05);
+    }
+    
+    .file-upload-container.dragover {
+      border-color: var(--primary-color);
+      background-color: rgba(67, 97, 238, 0.1);
+    }
+    
+    .file-upload-icon {
+      font-size: 3rem;
+      color: #777;
+      margin-bottom: 15px;
+    }
+    
+    .file-upload-text {
+      margin-bottom: 15px;
+    }
+    
+    .file-upload-text h3 {
+      color: var(--dark-color);
+      margin-bottom: 5px;
+    }
+    
+    .file-upload-text p {
+      color: #777;
+      font-size: 0.9rem;
+    }
+    
+    .file-input {
+      display: none;
+    }
+    
+    .browse-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+    
+    .browse-btn:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .image-preview {
+      margin-top: 20px;
+      display: none;
+      text-align: center;
+    }
+    
+    .image-preview img {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+    }
+    
+    .image-preview p {
+      margin-top: 10px;
+      color: #777;
+      font-size: 0.9rem;
+    }
+    
+    .error-message {
+      color: var(--error-color);
+      font-size: 0.85rem;
+      margin-top: 5px;
+      display: none;
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+    }
+    
+    button {
+      padding: 12px 25px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    button:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .back-link {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+    }
+    
+    .back-link:hover {
+      text-decoration: underline;
+    }
+    
+    .back-link i {
+      margin-right: 5px;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #666;
+      font-size: 0.8rem;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        max-width: 100%;
+      }
+      
+      .form-container {
+        padding: 20px;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+      }
+      
+      .back-link {
+        text-align: center;
+        justify-content: center;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Create New Blog Post</h1>
+      <p>Share your thoughts and ideas with the world</p>
+    </div>
+    
+    <div class="form-container">
+      <form id="blogForm" action="/add-blog" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="title" class="required">Post Title</label>
+          <input type="text" name="title" id="title" required placeholder="Enter a compelling title">
+          <div class="error-message" id="titleError">Title is required and must be at least 5 characters</div>
+        </div>
+        
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select name="category" id="category">
+            <option value="">Select a category</option>
+            <option value="technology">Technology</option>
+            <option value="lifestyle">Lifestyle</option>
+            <option value="travel">Travel</option>
+            <option value="food">Food</option>
+            <option value="health">Health & Wellness</option>
+            <option value="business">Business</option>
+            <option value="entertainment">Entertainment</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="content">Content</label>
+          <textarea name="content" id="content" placeholder="Write your blog post content here..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="image" class="required">Featured Image</label>
+          <div class="file-upload-container" id="dropArea">
+            <div class="file-upload-icon">
+              <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <div class="file-upload-text">
+              <h3>Upload your image</h3>
+              <p>Drag & drop your image here or click to browse</p>
+            </div>
+            <div class="browse-btn">Browse Files</div>
+            <input type="file" name="image" id="image" class="file-input" accept="image/*" required>
+          </div>
+          <div class="image-preview" id="imagePreview">
+            <img src="" alt="Preview">
+            <p>Image preview</p>
+          </div>
+          <div class="error-message" id="imageError">Please select a valid image file (JPG, PNG, GIF)</div>
+        </div>
+        
+        <div class="form-actions">
+          <a href="/" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Home
+          </a>
+          <button type="submit" id="submitBtn">Publish Post</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <div class="footer">
+    &copy; 2023 Blog Platform. All rights reserved.
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const blogForm = document.getElementById('blogForm');
+      const titleInput = document.getElementById('title');
+      const imageInput = document.getElementById('image');
+      const dropArea = document.getElementById('dropArea');
+      const imagePreview = document.getElementById('imagePreview');
+      const previewImg = imagePreview.querySelector('img');
+      const browseBtn = document.querySelector('.browse-btn');
+      const titleError = document.getElementById('titleError');
+      const imageError = document.getElementById('imageError');
+      const submitBtn = document.getElementById('submitBtn');
+      
+      // File upload via browse button
+      browseBtn.addEventListener('click', function() {
+        imageInput.click();
+      });
+      
+      // File upload via drag and drop
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+      });
+      
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+      });
+      
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+      });
+      
+      function highlight() {
+        dropArea.classList.add('dragover');
+      }
+      
+      function unhighlight() {
+        dropArea.classList.remove('dragover');
+      }
+      
+      dropArea.addEventListener('drop', handleDrop, false);
+      
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        imageInput.files = files;
+        handleFiles(files);
+      }
+      
+      // Handle file selection
+      imageInput.addEventListener('change', function() {
+        handleFiles(this.files);
+      });
+      
+      function handleFiles(files) {
+        if (files.length > 0) {
+          const file = files[0];
+          
+          // Check if file is an image
+          if (!file.type.match('image.*')) {
+            imageError.style.display = 'block';
+            imagePreview.style.display = 'none';
+            return;
+          }
+          
+          imageError.style.display = 'none';
+          
+          // Preview image
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            imagePreview.style.display = 'block';
+          }
+          
+          reader.readAsDataURL(file);
+        }
+      }
+      
+      // Title validation
+      titleInput.addEventListener('blur', function() {
+        const title = titleInput.value.trim();
+        
+        if (title.length < 5) {
+          titleError.style.display = 'block';
+          titleInput.style.borderColor = 'var(--error-color)';
+        } else {
+          titleError.style.display = 'none';
+          titleInput.style.borderColor = '#ddd';
+        }
+      });
+      
+      // Form submission
+      blogForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate form
+        const title = titleInput.value.trim();
+        const imageFile = imageInput.files[0];
+        
+        let isValid = true;
+        
+        if (title.length < 5) {
+          titleError.style.display = 'block';
+          titleInput.style.borderColor = 'var(--error-color)';
+          isValid = false;
+        }
+        
+        if (!imageFile || !imageFile.type.match('image.*')) {
+          imageError.style.display = 'block';
+          isValid = false;
+        }
+        
+        if (isValid) {
+          // Simulate form submission
+          submitBtn.textContent = 'Publishing...';
+          submitBtn.disabled = true;
+          
+          // In a real application, this would be an actual form submission
+          setTimeout(function() {
+            alert('Blog post published successfully! (This is a demo)');
+            submitBtn.textContent = 'Publish Post';
+            submitBtn.disabled = false;
+          }, 1500);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
